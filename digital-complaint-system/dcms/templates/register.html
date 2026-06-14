@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Register Complaint · DCMS{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="row justify-content-center"><div class="col-lg-9">
+    <div class="card glass">
+      <div class="card-header">Register a New Complaint</div>
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label">Full Name</label>
+              <input name="name" class="form-control" required maxlength="120"></div>
+            <div class="col-md-6"><label class="form-label">Email</label>
+              <input name="email" type="email" class="form-control" required maxlength="120"></div>
+            <div class="col-md-6"><label class="form-label">Phone</label>
+              <input name="phone" class="form-control" maxlength="20"></div>
+            <div class="col-md-6"><label class="form-label">Category</label>
+              <select name="category" class="form-select" required>
+                {% for c in categories %}<option>{{ c }}</option>{% endfor %}
+              </select></div>
+            <div class="col-md-8"><label class="form-label">Complaint Title</label>
+              <input name="title" class="form-control" required maxlength="200"></div>
+            <div class="col-md-4"><label class="form-label">Priority</label>
+              <select name="priority" class="form-select">
+                {% for p in priorities %}<option {% if p=='Medium' %}selected{% endif %}>{{ p }}</option>{% endfor %}
+              </select></div>
+            <div class="col-12"><label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="5" required maxlength="2000"></textarea></div>
+            <div class="col-md-8"><label class="form-label">Location</label>
+              <input name="location" class="form-control" maxlength="200"></div>
+            <div class="col-md-4"><label class="form-label">Document (optional)</label>
+              <input type="file" name="document" class="form-control"></div>
+          </div>
+          <div class="mt-4 d-flex gap-2">
+            <button class="btn btn-primary">Submit Complaint</button>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div></div>
+</div>
+{% endblock %}

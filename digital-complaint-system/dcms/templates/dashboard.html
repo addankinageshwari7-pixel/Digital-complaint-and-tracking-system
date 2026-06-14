@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}My Dashboard · DCMS{% endblock %}
+{% block content %}
+<div class="container section">
+  <h2 class="section-title">My Complaints</h2>
+  <p class="section-sub">View your complaint history by email.</p>
+  <div class="card glass mb-4"><div class="card-body">
+    <form method="get" class="row g-2">
+      <div class="col-md-9"><input name="email" class="form-control" value="{{ email }}" type="email" placeholder="Your registered email" required></div>
+      <div class="col-md-3 d-grid"><button class="btn btn-primary">Load Complaints</button></div>
+    </form>
+  </div></div>
+
+  {% if email %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>{{ complaints|length }} complaint(s) for {{ email }}</div>
+      {% if complaints %}<a class="btn btn-outline-primary btn-sm" href="{{ url_for('dashboard_export', email=email) }}">Export Excel</a>{% endif %}
+    </div>
+    {% if complaints %}
+    <div class="card glass"><div class="table-responsive"><table class="table mb-0">
+      <thead><tr><th>ID</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Submitted</th><th></th></tr></thead>
+      <tbody>
+        {% for c in complaints %}
+        <tr>
+          <td><code>{{ c.complaint_id }}</code></td>
+          <td>{{ c.title }}</td>
+          <td>{{ c.category }}</td>
+          <td class="p-{{ c.priority }}">{{ c.priority }}</td>
+          <td><span class="badge-status s-{{ c.status.replace(' ','-') }}">{{ c.status }}</span></td>
+          <td>{{ c.created_at.strftime('%Y-%m-%d') }}</td>
+          <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('track_complaint', cid=c.complaint_id, email=c.email) }}">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table></div></div>
+    {% else %}
+      <div class="alert alert-info">No complaints found for this email.</div>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

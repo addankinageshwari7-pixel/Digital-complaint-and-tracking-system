@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Track Complaint · DCMS{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="row justify-content-center"><div class="col-lg-9">
+    <div class="card glass mb-4">
+      <div class="card-header">Track Your Complaint</div>
+      <div class="card-body">
+        <form method="get" class="row g-3">
+          <div class="col-md-6"><label class="form-label">Complaint ID</label>
+            <input name="cid" value="{{ cid }}" class="form-control" placeholder="CMP-2026-123456" required></div>
+          <div class="col-md-6"><label class="form-label">Email</label>
+            <input name="email" type="email" value="{{ email }}" class="form-control" required></div>
+          <div class="col-12"><button class="btn btn-primary">Track Status</button></div>
+        </form>
+      </div>
+    </div>
+
+    {% if complaint %}
+    <div class="card glass">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>{{ complaint.complaint_id }} · {{ complaint.title }}</span>
+        <a href="{{ url_for('receipt', cid=complaint.complaint_id) }}" class="btn btn-sm btn-outline-primary">Download PDF Receipt</a>
+      </div>
+      <div class="card-body">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="kv"><span class="k">Status</span><span class="v"><span class="badge-status s-{{ complaint.status.replace(' ','-') }}">{{ complaint.status }}</span></span></div>
+            <div class="kv"><span class="k">Priority</span><span class="v p-{{ complaint.priority }}">{{ complaint.priority }}</span></div>
+            <div class="kv"><span class="k">Category</span><span class="v">{{ complaint.category }}</span></div>
+            <div class="kv"><span class="k">Department</span><span class="v">{{ complaint.assigned_department or 'Pending Assignment' }}</span></div>
+            <div class="kv"><span class="k">Location</span><span class="v">{{ complaint.location or '—' }}</span></div>
+            <div class="kv"><span class="k">Submitted</span><span class="v">{{ complaint.created_at.strftime('%Y-%m-%d %H:%M') }}</span></div>
+            <div class="kv"><span class="k">Last Updated</span><span class="v">{{ complaint.updated_at.strftime('%Y-%m-%d %H:%M') }}</span></div>
+            {% if complaint.resolution_notes %}
+            <div class="mt-3"><strong>Resolution Notes</strong><p class="mb-0">{{ complaint.resolution_notes }}</p></div>
+            {% endif %}
+          </div>
+          <div class="col-md-6">
+            <h6 class="mb-3">Status Timeline</h6>
+            {% set idx = statuses.index(complaint.status) %}
+            <ul class="timeline">
+              {% for s in statuses %}
+                {% set li_class = 'done' if loop.index0 < idx else ('active' if loop.index0 == idx else '') %}
+                <li class="{{ li_class }}">
+                  <div class="t">{{ s }}</div>
+                  <div class="d">{% if loop.index0 <= idx %}Completed{% else %}Pending{% endif %}</div>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="col-12">
+            <h6>Description</h6>
+            <p class="mb-0">{{ complaint.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div></div>
+</div>
+{% endblock %}
