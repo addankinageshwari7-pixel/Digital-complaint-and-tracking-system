@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Features · DCMS{% endblock %}
+{% block content %}
+<div class="container section">
+  <h2 class="section-title">Platform Features</h2>
+  <p class="section-sub">Everything you need to run a transparent grievance redressal program.</p>
+  <div class="row g-3">
+    {% set feats = [
+      ('Complaint Registration','Categorized intake with auto-generated unique IDs and PDF receipts.'),
+      ('Real-Time Tracking','Status timeline updated by departments at every workflow stage.'),
+      ('Smart Dashboard','Interactive Chart.js analytics across status, category and time.'),
+      ('Secure Platform','Role-based admin login with hashed credentials and CSRF-safe forms.'),
+      ('Fast Resolution','Priority routing and department assignment to accelerate closure.'),
+      ('Transparent Workflow','Public timeline plus auditable internal notes per complaint.')
+    ] %}
+    {% for t,d in feats %}
+    <div class="col-md-6 col-lg-4"><div class="card feature-card">
+      <div class="ico">★</div><h5>{{ t }}</h5><p class="text-muted mb-0">{{ d }}</p>
+    </div></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
